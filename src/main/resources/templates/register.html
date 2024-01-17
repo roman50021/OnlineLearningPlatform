@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: #03071d;
+            color: #ffffff; /* Текст будет белым на темном фоне */
+            margin: 0; /* Убираем отступы по умолчанию */
+        }
+        .container {
+            margin-top: 50px; /* Уменьшаем верхний отступ контейнера */
+        }
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .card-header {
+            margin-top: 20px;
+            background-color: #03071d; /* Цвет заголовка карточки */
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #03071d; /* Фон карточки будет светлым */
+            color: #ffffff; /* Текст на карточке будет темным */
+            border: 3px solid #696972; /* Граница карточки */
+            border-radius: 6px; /* Закругленные углы карточки */
+            max-width: 400px; /* Уменьшение ширины карточки формы */
+            margin: 0 auto; /* Центрирование карточки по горизонтали */
+            margin-top: 20px; /* Уменьшаем верхний отступ карточки */
+            margin-bottom: 20px; /* Уменьшаем нижний отступ карточки */
+        }
+
+        .card-header {
+            margin-top: 20px;
+            background-color: #03071d; /* Цвет заголовка карточки */
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .form-control {
+            background-color: #03071d; /* Цвет поля ввода */
+            color: #ffffff; /* Цвет текста в поле ввода */
+        }
+
+        .form-control:hover,
+        .form-control:focus {
+            background-color: #11254b; /* Новый цвет фона при наведении курсора на поле формы и при фокусе на поле формы */
+            color: #ffffff; /* Новый цвет текста в поле формы при наведении курсора и при фокусе */
+            border-color: #11254b; /* Новый цвет границы при наведении курсора и при фокусе */
+        }
+        .btn-primary {
+            background-color: #0c6b22; /* Зеленая кнопка */
+            border-color: #0c6b22; /* Цвет границы кнопки */
+            display: block;
+            margin: 0 auto; /* Центрирование кнопки по горизонтали */
+            margin-top: 0px; /* Отступ сверху */
+            -webkit-margin-after: 1px;
+            width: 338px;
+            -webkit-margin-after: 22px;
+        }
+        .btn-primary:hover {
+            background-color: #218838; /* Новый цвет при наведении курсора на кнопку */
+            border-color: #218838; /* Новый цвет границы при наведении курсора на кнопку */
+        }
+        .form-group-btn {
+            margin-top: 20px; /* Увеличиваем верхний отступ для блока с кнопкой */
+        }
+        .alert {
+            max-width: 400px;
+            margin: 0 auto; /* Центрирование по горизонтали */
+            position: fixed; /* Фиксированное положение */
+            left: 50%; /* Положение по горизонтали в середине экрана */
+            transform: translate(-50%, -50%); /* Центрирование относительно своего центра */
+            padding: 10px; /* Добавление отступов вокруг уведомления */
+            color: #0dcc3b; /* Цвет текста для уведомления об ошибке (пример) */
+            border: none; /* Убираем границу */
+            border-radius: 0; /* Убираем закругление углов */
+            box-shadow: none; /* Убираем тень */
+            background: none; /* Убираем фон */
+        }
+    </style>
+</head>
+<body>
+<br />
+<br />
+<br />
+<div class="container">
+    <div class="card-header">
+        <h3>Online Learning Platform</h3>
+    </div>
+    <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully registered to our app!</div>
+    </div>
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Sing up</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
+                    <div class="form-group mb-3">
+                        <label class="form-label">First Name</label>
+                        <input class="form-control"
+                               id="firstName"
+                               name="firstName"
+                               placeholder="Enter first name"
+                               th:field="*{firstname}"
+                               type="text"
+                        />
+                        <p th:errors="*{firstname}" class="text-danger"
+                           th:if="${#fields.hasErrors('firstname')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input class="form-control"
+                               id="lastName"
+                               name="lastName"
+                               placeholder="Enter last name"
+                               th:field="*{lastname}"
+                               type="text"
+                        />
+                        <p th:errors="*{lastname}" class="text-danger"
+                           th:if="${#fields.hasErrors('lastname')}">
+                        </p>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Enter email address"
+                               th:field="*{email}"
+                               type="email"
+                        />
+                        <p th:errors="*{email}" class="text-danger"
+                           th:if="${#fields.hasErrors('email')}">
+                        </p>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="Enter password"
+                               th:field="*{password}"
+                               type="password"
+                        />
+                        <p th:errors="*{password}" class="text-danger"
+                           th:if="${#fields.hasErrors('password')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3 form-group-btn">
+                        <button class="btn btn-primary" type="submit">Sign Up</button>
+                        <span>Already registered? <a href="/" th:href="@{/login}">Sign in</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
