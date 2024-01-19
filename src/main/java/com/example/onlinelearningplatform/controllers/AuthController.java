@@ -36,14 +36,14 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("login")
+    @GetMapping(value = "/login")
     public String loginForm(Model model) {
         LoginUserDto loginUserDto = new LoginUserDto();
         model.addAttribute("loginUserDto", loginUserDto);
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public String login(@ModelAttribute("loginUserDto") LoginUserDto loginUserDto,
                         RedirectAttributes redirectAttributes) {
         String email = loginUserDto.getEmail();
@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     // handler method to handle user registration request
-    @GetMapping("register")
+    @GetMapping("/register")
     public String showRegistrationForm(Model model){
         UserDto user = new UserDto();
         model.addAttribute("user", user);

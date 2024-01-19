@@ -11,7 +11,7 @@ import java.security.Principal;
 public class MainController {
 
     @GetMapping("/main")
-    public String main(){
+    public String forMain(){
         return "main";
     }
 
