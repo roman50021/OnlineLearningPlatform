@@ -24,10 +24,18 @@ public class SecurityConfig {
     private final UserServiceImpl userService;
     public final UserDetailsServiceImp userDetailsServiceImp;
 
+    private static final String[] PUBLIC_MATCHERS = {
+            "/css/**",
+            "/js/**",
+            "/webjars/**",
+            "/static/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(PUBLIC_MATCHERS).permitAll()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/index").permitAll()
                         .requestMatchers("/users").hasAuthority("ADMIN")
