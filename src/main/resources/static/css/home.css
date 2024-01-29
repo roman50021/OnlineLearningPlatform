@@ -1,0 +1,59 @@
+/* CSS для кнопки выхода */
+.btn-logout {
+    background-color: #dc3545; /* Цвет фона */
+    border-color: #dc3545; /* Цвет границы */
+    color: #fff; /* Цвет текста */
+    width: 150px;
+    height: 40px;
+}
+
+.btn-logout:hover {
+    background-color: #c82333; /* Цвет фона при наведении */
+    border-color: #bd2130; /* Цвет границы при наведении */
+}
+
+body {
+    background-color: #03071d;
+    color: #ffffff; /* Текст будет белым на темном фоне */
+    margin: 0; /* Убираем отступы по умолчанию */
+}
+.navbar {
+    background-color: #03071d;
+    padding: 10px;
+}
+
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.card {
+    background-color: #03071d; /* Фон карточки будет светлым */
+    color: #ffffff; /* Текст на карточке будет темным */
+    border: 3px solid #696972; /* Граница карточки */
+    border-radius: 6px; /* Закругленные углы карточки */
+    max-width: 400px; /* Уменьшение ширины карточки формы */
+    margin: 0 auto; /* Центрирование карточки по горизонтали */
+    margin-top: 20px; /* Уменьшаем верхний отступ карточки */
+    margin-bottom: 20px; /* Уменьшаем нижний отступ карточки */
+}
+
+.card-header {
+    margin-top: 20px;
+    background-color: #03071d; /* Цвет заголовка карточки */
+    color: #ffffff;
+    text-align: center;
+}
+
+.form-control {
+    background-color: #03071d; /* Цвет поля ввода */
+    color: #ffffff; /* Цвет текста в поле ввода */
+}
+
+.form-control:hover,
+.form-control:focus {
+    background-color: #11254b; /* Новый цвет фона при наведении курсора на поле формы и при фокусе на поле формы */
+    color: #ffffff; /* Новый цвет текста в поле формы при наведении курсора и при фокусе */
+    border-color: #11254b; /* Новый цвет границы при наведении курсора и при фокусе */
+}
