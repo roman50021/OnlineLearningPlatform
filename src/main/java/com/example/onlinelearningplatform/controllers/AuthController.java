@@ -36,6 +36,11 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/")
+    public String mainPage(Model model) {
+        return "main";
+    }
+
     @GetMapping(value = "/login")
     public String loginForm(Model model) {
         LoginUserDto loginUserDto = new LoginUserDto();
@@ -114,7 +119,8 @@ public class AuthController {
         logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 
         // Перенаправляем на страницу входа
-        return "redirect:/login";
+        return "redirect:/main";
     }
+
 }
 
