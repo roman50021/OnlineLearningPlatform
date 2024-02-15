@@ -3,6 +3,7 @@ package com.example.onlinelearningplatform.service.implementations;
 import com.example.onlinelearningplatform.models.Role;
 import com.example.onlinelearningplatform.models.User;
 import com.example.onlinelearningplatform.repos.UserRepository;
+import com.example.onlinelearningplatform.token.ConfirmationTokenService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +16,10 @@ class UserServiceImplTest {
     public void testAuthenticateByEmail_EnabledFalse(){
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        ConfirmationTokenService confirmationTokenService = Mockito.mock(ConfirmationTokenService.class);
 
-        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
+
+        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder, confirmationTokenService);
 
         String email = "test@example.com";
         String password = "password";
@@ -36,9 +39,10 @@ class UserServiceImplTest {
         // Создание мок-объектов
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        ConfirmationTokenService confirmationTokenService = Mockito.mock(ConfirmationTokenService.class);
 
         // Создание экземпляра класса UserServiceImpl с использованием мок-объектов
-        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
+        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder, confirmationTokenService);
 
         // Задание значений для теста
         String email = "test@example.com";
@@ -61,9 +65,10 @@ class UserServiceImplTest {
         // Создание мок-объектов
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        ConfirmationTokenService confirmationTokenService = Mockito.mock(ConfirmationTokenService.class);
 
         // Создание экземпляра класса UserServiceImpl с использованием мок-объектов
-        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
+        UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder, confirmationTokenService);
 
         // Задание значений для теста
         String email = "test@example.com";

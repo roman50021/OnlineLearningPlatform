@@ -4,6 +4,7 @@ import com.example.onlinelearningplatform.dto.LoginUserDto;
 import com.example.onlinelearningplatform.dto.UserDto;
 import com.example.onlinelearningplatform.models.User;
 import com.example.onlinelearningplatform.service.implementations.UserServiceImpl;
+import com.example.onlinelearningplatform.token.ConfirmationTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,9 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,11 +28,7 @@ import java.util.List;
 public class AuthController {
 
     private final UserServiceImpl userService;
-
-    @GetMapping(value = "/")
-    public String mainPage(Model model) {
-        return "main";
-    }
+    private final ConfirmationTokenService confirmationTokenService;
 
     @GetMapping(value = "/login")
     public String loginForm(Model model) {
@@ -71,8 +67,6 @@ public class AuthController {
     public String registration(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,
                                Model model) {
-        System.out.println("Received UserDto: " + user);
-
         if (result.hasErrors()) {
             // Если есть ошибки валидации
             System.out.println("Validation errors: " + result.getAllErrors());
@@ -95,12 +89,16 @@ public class AuthController {
         return "redirect:/register?success";
     }
 
-    @GetMapping("/users")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String listRegisteredUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        model.addAttribute("users", users);
-        return "users";
+    @GetMapping("/confirm")
+    public String confirm(@RequestParam("token") String token){
+        String result = userService.confirmToken(token);
+        if ("confirmed".equals(result)) {
+            // Если токен подтвержден успешно, перенаправляем на страницу с сообщением об успешном подтверждении
+            return "redirect:/confirm/success";
+        } else {
+            // Если произошла ошибка подтверждения, перенаправляем на страницу с сообщением об ошибке
+            return "redirect:/confirm/error";
+        }
     }
 
     @GetMapping("/logout")

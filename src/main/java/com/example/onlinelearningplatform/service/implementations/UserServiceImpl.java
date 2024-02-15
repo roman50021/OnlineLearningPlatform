@@ -5,6 +5,9 @@ import com.example.onlinelearningplatform.models.Role;
 import com.example.onlinelearningplatform.models.User;
 import com.example.onlinelearningplatform.repos.UserRepository;
 import com.example.onlinelearningplatform.service.services.UserService;
+import com.example.onlinelearningplatform.token.ConfirmationToken;
+import com.example.onlinelearningplatform.token.ConfirmationTokenRepository;
+import com.example.onlinelearningplatform.token.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,10 +16,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +29,24 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
     public void save(UserDto userDto) {
         User user = new User(userDto.getEmail(), userDto.getFirstname(), userDto.getLastname(),
                 passwordEncoder.encode(userDto.getPassword()), Role.USER);
         userRepository.save(user);
+
+        // TODO: Send confirmation token
+        String token = UUID.randomUUID().toString();
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                user
+        );
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: Send email
     }
 
     @Override
@@ -81,16 +99,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return false; // Если пользователь не найден или не прошел проверку, вернуть false
     }
 
-    public List<UserDto> findAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map((user) -> convertEntityToDto(user))
-                .collect(Collectors.toList());
+    @Override
+    public int enableUser(String email) {
+        return userRepository.enableUser(email);
     }
 
-    private UserDto convertEntityToDto(User user){
-        UserDto userDto = new UserDto();
-        userDto.setEmail(user.getEmail());
-        return userDto;
+    @Transactional
+    public String confirmToken(String token) {
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(token)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        confirmationTokenService.setConfirmedAt(token);
+        enableUser(
+                confirmationToken.getUser().getEmail());
+        return "confirmed";
     }
 
 }
