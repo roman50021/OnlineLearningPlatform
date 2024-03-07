@@ -94,7 +94,7 @@ public class AuthController {
         String result = userService.confirmToken(token);
         if ("confirmed".equals(result)) {
             // Если токен подтвержден успешно, перенаправляем на страницу с сообщением об успешном подтверждении
-            return "redirect:/confirm/success";
+            return "redirect:/login";
         } else {
             // Если произошла ошибка подтверждения, перенаправляем на страницу с сообщением об ошибке
             return "redirect:/confirm/error";
